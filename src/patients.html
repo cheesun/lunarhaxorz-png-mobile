@@ -1,15 +1,28 @@
 <html>
   <head>
+    <script type='text/javascript' src='handlebars-v1.1.2.js'></script>
     <script type='text/javascript' src='jquery-1.9.1.min.js'></script>
+    <script type='text/javascript' src='jquery.sieve.min.js'></script>
+    <script id="patient-template" type="text/x-handlebars-template">
+      <tr>
+        <td>{{id}}</td>
+        <td>{{name}}</td>
+      </tr>
+    </script>
+
   </head>
   <body>
     <div id='search-container'>
       <input type='text' id='search'></input><input type='button'></input>
     </div>
-    <table>
+    <table id='patients-table'>
       <thead>
+        <tr>
+          <th>id</th><th>name</th>
+        </tr>
       </thead>
-
+      <tbody>
+      </tbody>
     </table>
     <script type='text/javascript' src='patients.js'></script>
   </body>
