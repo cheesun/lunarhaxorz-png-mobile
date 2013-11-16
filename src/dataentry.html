@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<title>Patient Data</title>
+		<script type='text/javascript' src='jquery-1.9.1.min.js'></script>
+		<script>
+			function processLine(linename) {
+				//Analyse the content of the line here
+				
+			    var cb = $('#cursorbox')
+				var dataline = $('<div>' + $(linename).val() + '</div>');
+				cb.before(dataline);
+				dataline.on('click', function() {
+					processLine('#cursorbox');
+			    	var cb = $('#cursorbox')
+			        dataline.after(cb)
+			        cb.val(dataline.text());
+					dataline.remove();
+					cb.focus();
+				});
+				$(linename).val("");
+				return false;
+			}
+		</script>
+	</head>
+	<body>
+		<h3>Current Patient ID: ~</h3>
+		<form onsubmit="return processLine('#cursorbox');">
+			<div id="Data">
+				<input type="text" id="cursorbox" size="150">
+			</div>
+		</form>
+	</body>
+</html>
