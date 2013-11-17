@@ -43,12 +43,12 @@
 						line_processed += lineval.substr(upto, i - upto) + '<b>' + key + ':' + val + '</b>';
 						$$.Datapoint.create ({
 							patient_id: parseInt(patient_id, 10),
-							status: '1',
-							timeIn: '-',
-							timeFor: '-',
-							timeOut: '-',
-							user: '-',
-							device: '-',
+							status: 'valid',
+							timeIn: '1',
+							timeFor: '1',
+							timeOut: '1',
+							user: '1',
+							device: '1',
 							field_id: keys[k].id,
 							value: val
 						});
