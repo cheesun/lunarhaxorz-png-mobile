@@ -48,7 +48,7 @@
  _el.appendChild(_e2);
  _e2.appendChild(document.createTextNode("Patient Summary"));
 
- _DB = window.openDatabase("TestDataBase", "1.0", "TEST", 1048576);
+ _DB = window.openDatabase("test", "1.0", "test", 200000);
 
  _read = function () {
   _DB.transaction (function (_Transaction) {
@@ -69,7 +69,7 @@
      _el.appendChild(_e2);
      _e3 = document.createElement("a");
      _e3.appendChild(document.createTextNode("[create new record]"));
-     _e3.href = "dataentry.html?" + _mrn.toString(10);
+     _e3.href = "dataentry.html?id=" + _mrn.toString(10);
      _e2.appendChild(_e3);
     }
    }, _DB_EXEC_ERROR);
@@ -108,7 +108,7 @@ value.indexOf('\n') == -1) {
   _el.appendChild(_e2);
   _e3 = document.createElement("a");
   _e3.appendChild(document.createTextNode("[update this record]"));
-  _e3.href = "dataentry.html?" + _mrn.toString(10);
+  _e3.href = "dataentry.html?id=" + _mrn.toString(10);
   _e2.appendChild(_e3);
   if (_man && _loadb) {
    _loadb.removeEventListener("click", _forceLoad, false);
