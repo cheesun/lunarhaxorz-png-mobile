@@ -5,21 +5,33 @@
 		<script type='text/javascript' src='models.js'></script>
 		<script>
 			var patient_id = $$.Utils.queryParam('id');
-						
-			var keys = ['bp', 'hr']
+			
+			var keys = [];
+			$$.Field.getAll(function (results) {
+				var rl = results.rows.length;
+      			for (i = 0; i < rl; i ++) {
+        			var v = results.rows.item(i);
+        			//console.log(v.id);
+					keys.push ({key:v.key, id:v.id});
+    			}
+    			//console.log (keys);
+				//console.log (results.rows);
+			});
+			
 			function processLine(linename) {
 				//Analyse the content of the line here
 				var lineval = $(linename).val();
 				
 				for (k in keys) {
-					var re = new RegExp('\\b(' + keys[k] + ')(?: +|:)(\\d+)\\b', 'ig');
+					//console.log (keys[k]);
+					var re = new RegExp('\\b(' + keys[k].key.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1') + ')(?: +|:)(\\d+)\\b', 'ig');
 					var upto = 0;
 					var line_processed = "";
 					var reresult;
 					while (reresult = re.exec(lineval)) {
+						console.log (reresult);
 						var key = reresult[1];
 						var val = reresult[2];
-						//console.log (key + ' ' + val);
 						var i = reresult.index;
 						var n = reresult[0].length;
 						
@@ -33,7 +45,7 @@
 							timeOut: '-',
 							user: '-',
 							device: '-',
-							field_id: key,
+							field_id: keys[k].id,
 							value: val
 						});
 						patient_id
@@ -63,7 +75,7 @@
 		</script>
 	</head>
 	<body>
-		<h3>Current Patient ID: ~</h3>
+		<h3>Current Patient: <span id="patientname"></span></h3>
 			<div id="Data">
 				<input onchange="return processLine('#cursorbox');" type="text" id="cursorbox" size="150">
 			</div>
