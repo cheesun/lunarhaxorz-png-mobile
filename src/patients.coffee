@@ -5,6 +5,11 @@
     buildTable()
   )
 
+  $('#reset-database').click((event) ->
+    $$.Database.reset($$.Models)
+    buildTable()
+  )
+
   buildTable = () ->
     template = Handlebars.compile($("#patient-template").html())
     $$.Patient.getAllWithName((results) ->
@@ -18,6 +23,5 @@
 
   buildTable()
   $('#patients-table').sieve()
-  console.log($$.Utils.queryParam('id'))
 
 ) jQuery
