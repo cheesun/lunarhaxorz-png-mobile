@@ -7,6 +7,8 @@
 </title>
 <style type="text/css">
 </style>
+<script type='text/javascript' src='jquery-1.9.1.min.js'></script>
+<script type='text/javascript' src='models.js'></script>
 </head>
 <body>
 <script type="text/javascript"><!--
@@ -50,6 +52,12 @@
      _e2 = document.createElement("div");
      _el.appendChild(_e2);
      _e2.appendChild(document.createTextNode("Patient not found."));
+     _e2 = document.createElement("div");
+     _el.appendChild(_e2);
+     _e3 = document.createElement("a");
+     _e3.appendChild(document.createTextNode("[create new record]"));
+     _e3.href = "dataentry.html?" + _mrn.toString(10);
+     _e2.appendChild(_e3);
     }
    }, _DB_EXEC_ERROR);
   }, _DB_TRANS_ERROR, null);
@@ -89,7 +97,9 @@
 
  _forceLoad = function () {_mrn = _mrni.value; _read();};
 
- if (typeof localStorage.mrn === "undefined") {
+ _mrn = $$.Utils.queryParam('id');
+
+ if (isNaN(parseInt(_mrn, 10))) {
   _man = document.createElement("div");
   _el.appendChild(_man);
   _man.appendChild(document.createTextNode("MRN: "));
@@ -104,7 +114,7 @@
   _man.appendChild(_loadb);
   _loadb.addEventListener("click", _forceLoad, false);
  } else {
-  _mrn = localStorage.mrn;
+  _mrn = parseInt(_mrn, 10);
   _read();
  }
 
