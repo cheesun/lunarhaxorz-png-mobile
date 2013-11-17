@@ -51,9 +51,7 @@ class Model
   buildFixtures: ->
     return unless @schema.fixtures
     for item in @schema.fixtures
-      Database.runSql(
-        'insert into ' + @schema.name + '(' + @schema.columns.join(',') + ') ' +
-        'values (' + @schema.columns.map((val) -> '"' + item[val] + '"').join(',') + ')')
+      @create(item)
 
   buildTable: (clear) ->
     db = Database.open()
@@ -70,6 +68,12 @@ class Model
     Database.runSql('select * from ' + @schema.name + ' where id = ' + id,
       (results) ->
         callback(results.rows.item(0))
+    )
+
+  create: (data) ->
+    Database.runSql(
+      'insert into ' + @schema.name + '(id, ' + @schema.columns.join(',') + ') ' +
+      'values (null, ' + @schema.columns.map((val) -> '"' + data[val] + '"').join(',') + ')')
 
 Patient = new Model(Schemas.patients)
 Summary = new Model(Schemas.summaries)
