@@ -10,6 +10,11 @@
     buildTable()
   )
 
+  $('#erase-database').click((event) ->
+    $$.Database.erase($$.Models)
+    buildTable()
+  )
+
   buildTable = () ->
     template = Handlebars.compile($("#patient-template").html())
     $$.Patient.getAllWithName((results) ->
@@ -23,5 +28,7 @@
 
   buildTable()
   $('#patients-table').sieve()
+
+
 
 ) jQuery
