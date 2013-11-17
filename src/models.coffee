@@ -186,8 +186,8 @@ Datapoint = new Model(Schemas.datapoints)
 Field = new Model(Schemas.fields)
 
 for model in [Patient, Summary, Datapoint, Field]
-  model.buildTable(true)
-  model.buildFixtures()
+  model.buildTable()
+  #model.buildFixtures()
 
 # exports - is there a better way?
 window.$$ = window.$$ || {}

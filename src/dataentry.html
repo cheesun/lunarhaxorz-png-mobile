@@ -4,6 +4,8 @@
 		<script type='text/javascript' src='jquery-1.9.1.min.js'></script>
 		<script type='text/javascript' src='models.js'></script>
 		<script>
+			var patient_id = $$.Utils.queryParam('id');
+						
 			var keys = ['bp', 'hr']
 			function processLine(linename) {
 				//Analyse the content of the line here
@@ -22,7 +24,19 @@
 						var n = reresult[0].length;
 						
 						//Values are separated here - store and embed them into the line
-						line_processed += lineval.substr(upto, i - upto) + '<b>' + key + ':' + val + '</b>';;
+						line_processed += lineval.substr(upto, i - upto) + '<b>' + key + ':' + val + '</b>';
+						$$.Datapoint.create ({
+							patient_id: parseInt(patient_id, 10),
+							status: '1',
+							timeIn: '-',
+							timeFor: '-',
+							timeOut: '-',
+							user: '-',
+							device: '-',
+							field_id: key,
+							value: val
+						});
+						patient_id
 						
 						upto = i + n;
 					}
