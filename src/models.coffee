@@ -44,6 +44,10 @@ Database = {
       console.log(model)
       model.buildTable(true)
       model.buildFixtures()
+
+  empty: (models) ->
+    for model in models
+      model.buildTable(true)
 }
 
 Schemas = {
@@ -76,11 +80,31 @@ Schemas = {
   summaries: {
     name: 'summaries'
     columns: ['patient_id', 'date']
+    methods: {
+      getFields: (patient_id, field_id, callback) ->
+        conditions = []
+        conditions.push('summaries.patient_id = ' + patient_id) if patient_id
+        conditions.push('summaryValues.field_id = ' + field_id) if field_id
+        Database.runSql('
+          select datapoints.*
+          from summaries
+          join summaryValues on summaries.id = summaryValues.summary_id
+          join datapoints on summaryValues.dataPoint = datapoints.id
+          where ' +
+          conditions.join(' and '),
+          callback)
+    }
+    fixtures: [
+      { patient_id: 1, date: 'now' }
+    ]
   }
 
   summaryValues: {
     name: 'summaryValues'
     columns: ['summary_id', 'field_id', 'dataPoint']
+    fixtures: [
+      { summary_id: 1, field_id: 2, dataPoint: 1 }
+    ]
   }
 
   fields: {
@@ -190,6 +214,7 @@ Patient = new Model(Schemas.patients)
 Summary = new Model(Schemas.summaries)
 Datapoint = new Model(Schemas.datapoints)
 Field = new Model(Schemas.fields)
+SummaryValue = new Model(Schemas.summaryValues)
 
 # exports - is there a better way?
 window.$$ = window.$$ || {}
@@ -197,8 +222,9 @@ window.$$.Database = Database
 window.$$.Patient = Patient
 window.$$.Summary = Summary
 window.$$.Datapoint = Datapoint
+window.$$.SummaryValue = SummaryValue
 window.$$.Field = Field
 window.$$.Utils = Utils
-window.$$.Models = [Patient, Summary, Datapoint, Field]
+window.$$.Models = [Patient, Summary, Datapoint, Field, SummaryValue]
 
 
