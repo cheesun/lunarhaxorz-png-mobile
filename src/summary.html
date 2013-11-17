@@ -226,7 +226,7 @@ console.log("select * from summaries where patient_id = " + _mrn.toString(10) + 
 
     for (__n = 0, __l = _S.length; __n < __l; __n++) {
 console.log("insert into summaryValues (summary_id, field_id, dataPoint) values (" + ___Result.rows.item(0).id + ", " + _S[__n].fid + ", " + _S[__n].dp + ")");
-     __Transaction.executeSql("insert into summaryValues (summary_id, field_id, dataPoint) values (" + ___Result.rows.item(0).id + ", " + _S[__n].fid + ", " + _S[__n].dp + ")", [], null, _DB_EXEC_ERROR);
+     __Transaction.executeSql("insert into summaryValues (summary_id, field_id, dataPoint) values (" + ___Result.rows.item(0).id + ", " + _S[__n].fid + ", " + _S[__n].dp + ")", [], function () {window.location.reload(true);}, _DB_EXEC_ERROR);
     }
 
    }, _DB_EXEC_ERROR);
@@ -236,7 +236,7 @@ console.log("insert into summaryValues (summary_id, field_id, dataPoint) values 
  _forceLoad = function () {_mrn = _mrni.value; _read();};
 
  _mrn = $$.Utils.queryParam('id');
-//_mrn = 2;
+// _mrn = 2;
 
  if (isNaN(parseInt(_mrn, 10))) {
   _man = document.createElement("div");
