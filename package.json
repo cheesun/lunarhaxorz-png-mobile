@@ -1,0 +1,29 @@
+{
+  "name": "lunarhaxorz-png-mobile",
+  "version": "0.0.0",
+  "description": "lunarhaxorz-png-mobile ======================",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cheesun/lunarhaxorz-png-mobile.git"
+  },
+  "author": "",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/cheesun/lunarhaxorz-png-mobile/issues"
+  },
+  "devDependencies": {
+    "grunt-contrib-coffee": "~0.7.0",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-cli": "~0.1.11",
+    "grunt-coffeelint": "0.0.7",
+    "grunt": "~0.4.1",
+    "grunt-contrib-copy": "~0.4.1"
+  },
+  "dependencies": {
+    "coffee-script": "~1.6.3"
+  }
+}

@@ -14,7 +14,6 @@
     $$.Patient.getAll((results) ->
       for i in [0...results.rows.length]
         value = results.rows.item(i)
-        console.log(value)
         $('#patients-table tbody').append(template({ id: value.id, name: value.name}))
     )
     $('#patients-table').sieve()
