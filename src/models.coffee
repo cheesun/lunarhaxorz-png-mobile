@@ -38,6 +38,12 @@ Database = {
       @logError
       )
     )
+
+  reset: (models) ->
+    for model in models
+      console.log(model)
+      model.buildTable(true)
+      model.buildFixtures()
 }
 
 Schemas = {
@@ -185,14 +191,14 @@ Summary = new Model(Schemas.summaries)
 Datapoint = new Model(Schemas.datapoints)
 Field = new Model(Schemas.fields)
 
-for model in [Patient, Summary, Datapoint, Field]
-  model.buildTable(true)
-  model.buildFixtures()
-
 # exports - is there a better way?
 window.$$ = window.$$ || {}
 window.$$.Database = Database
 window.$$.Patient = Patient
 window.$$.Summary = Summary
 window.$$.Datapoint = Datapoint
+window.$$.Field = Field
 window.$$.Utils = Utils
+window.$$.Models = [Patient, Summary, Datapoint, Field]
+
+
