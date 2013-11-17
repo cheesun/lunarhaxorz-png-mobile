@@ -81,9 +81,24 @@ Schemas = {
     name: 'summaries'
     columns: ['patient_id', 'date']
     methods: {
-      getFields: (patient_id, field_id, callback) ->
+      getLatestFieldsForPatient: (patient_id, field_id, callback) ->
+        @getLatestForPatient(patient_id, (results) =>
+          if results.rows.length > 0
+            summary_id = results.rows.item(0).id
+            @getFields(summary_id, field_id, callback)
+        )
+      getLatestForPatient: (patient_id, callback) ->
+        Database.runSql('
+          select *
+          from summaries
+          where patient_id = ' + patient_id +
+        ' order by date desc
+          limit 1',
+          callback
+        )
+      getFields: (summary_id, field_id, callback) ->
         conditions = []
-        conditions.push('summaries.patient_id = ' + patient_id) if patient_id
+        conditions.push('summaries.id = ' + summary_id) if summary_id
         conditions.push('summaryValues.field_id = ' + field_id) if field_id
         Database.runSql('
           select datapoints.*
@@ -92,10 +107,11 @@ Schemas = {
           join datapoints on summaryValues.dataPoint = datapoints.id
           where ' +
           conditions.join(' and '),
-          callback)
+          callback
+        )
     }
     fixtures: [
-      { patient_id: 1, date: 'now' }
+      { patient_id: 1, date: 0 }
     ]
   }
 
