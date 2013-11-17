@@ -5,8 +5,8 @@
     <script type='text/javascript' src='jquery.sieve.min.js'></script>
     <script id="patient-template" type="text/x-handlebars-template">
       <tr>
-        <td>{{id}}</td>
-        <td>{{name}}</td>
+        <td><a href="summary.html?id={{id}}">{{id}}</a></td>
+        <td><a href="summary.html?id={{id}}">{{name}}</a></td>
       </tr>
     </script>
     <script id="div-template" type="text/x-handlebars-template">
@@ -15,9 +15,6 @@
 
   </head>
   <body>
-    <div id='new-patient'>
-      <input id='add-patient' type='button' value='add'>
-    </div>
     <table id='patients-table'>
       <thead>
         <tr>
@@ -27,6 +24,9 @@
       <tbody>
       </tbody>
     </table>
+    <div id='new-patient'>
+      <input id='add-patient' type='button' value='add'>
+    </div>
     <script type='text/javascript' src='models.js'></script>
     <script type='text/javascript' src='patients.js'></script>
   </body>

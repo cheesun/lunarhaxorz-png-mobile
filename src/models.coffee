@@ -125,9 +125,8 @@ Schemas = {
         Database.runSql('
           select patients.id, datapoints.value as name
           from patients
-          join datapoints on patients.id = datapoints.patient_id
-          join fields on datapoints.field_id = fields.id
-          where fields.key = "Firstname"
+          left join datapoints on patients.id = datapoints.patient_id
+          where datapoints.field_id = 2 or datapoints.field_id is null
           ', callback)
     }
   }
