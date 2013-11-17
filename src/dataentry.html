@@ -6,7 +6,7 @@
 		<script>
 			var patient_id = $$.Utils.queryParam('id');
 			
-			$$.Summary.getFields(patient_id, 2, function(results) {
+			$$.Summary.getLatestFieldsForPatient(patient_id, 2, function(results) {
 				$('#patientname').html (results.rows.item(0).value);
 			});
 			
