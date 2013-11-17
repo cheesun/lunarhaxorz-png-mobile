@@ -5,7 +5,7 @@ module.exports = (grunt) ->
         files: [
           expand: true
           flatten: true
-          src: ['src/*.html', 'src/*.js', 'src/*.css']
+          src: ['src/*.html', 'src/*.js', 'src/*.css', 'src/*.xml']
           dest: 'target/'
         ]
     coffee:

@@ -6,6 +6,10 @@
 		<script>
 			var patient_id = $$.Utils.queryParam('id');
 			
+			$$.Summary.getFields(patient_id, 2, function(results) {
+				$('#patientname').html (results.rows.item(0).value);
+			});
+			
 			var keys = [];
 			$$.Field.getAll(function (results) {
 				var rl = results.rows.length;
@@ -39,12 +43,12 @@
 						line_processed += lineval.substr(upto, i - upto) + '<b>' + key + ':' + val + '</b>';
 						$$.Datapoint.create ({
 							patient_id: parseInt(patient_id, 10),
-							status: '1',
-							timeIn: '-',
-							timeFor: '-',
-							timeOut: '-',
-							user: '-',
-							device: '-',
+							status: 'valid',
+							timeIn: '1',
+							timeFor: '1',
+							timeOut: '1',
+							user: '1',
+							device: '1',
 							field_id: keys[k].id,
 							value: val
 						});
@@ -76,6 +80,7 @@
 	</head>
 	<body>
 		<h3>Current Patient: <span id="patientname"></span></h3>
+		<h4><a href='summary.html' id="backbutton">Back</a><h4>
 			<div id="Data">
 				<input onchange="return processLine('#cursorbox');" type="text" id="cursorbox" size="150">
 			</div>
