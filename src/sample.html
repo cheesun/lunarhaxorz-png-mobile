@@ -32,12 +32,14 @@
   _Transaction.executeSql("drop table if exists summaries", [], null, _DB_EXEC_ERROR);
   _Transaction.executeSql("drop table if exists summaryValues", [], null, _DB_EXEC_ERROR);
   _Transaction.executeSql("drop table if exists dataPoints", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("drop table if exists fields", [], null, _DB_EXEC_ERROR);
   // status codes: 0 = invalid; 1 = normal; 2 = modified; 3 = error
   _Transaction.executeSql("create table if not exists patients (id integer primary key autoincrement unique)", [], null, _DB_EXEC_ERROR);
   _Transaction.executeSql("create table if not exists staff (id integer primary key autoincrement unique, name)", [], null, _DB_EXEC_ERROR);
   _Transaction.executeSql("create table if not exists summaries (id integer primary key autoincrement unique, patient, date)", [], null, _DB_EXEC_ERROR);
   _Transaction.executeSql("create table if not exists summaryValues (id integer primary key autoincrement unique, summary, field, dataPoint)", [], null, _DB_EXEC_ERROR);
   _Transaction.executeSql("create table if not exists dataPoints (id integer primary key autoincrement unique, patient, status, timeIn, timeFor, timeOut, user, device, type, result)", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("create table if not exists fields (id integer primary key autoincrement unique, sortOrder, name, key)", [], null, _DB_EXEC_ERROR);
   _Transaction.executeSql("insert into patients (id) values (null)", [], null, _DB_EXEC_ERROR);
   _Transaction.executeSql("insert into patients (id) values (null)", [], null, _DB_EXEC_ERROR);
   _Transaction.executeSql("insert into patients (id) values (null)", [], null, _DB_EXEC_ERROR);
@@ -75,8 +77,39 @@
   _Transaction.executeSql("insert into dataPoints (patient, status, timeIn, timeFor, timeOut, user, device, type, result) values (3, 1, 3, 1, 1, 1, \"device1\", \"History (Inactive)\",    \"THR\nT&A\nPTx\")", [], null, _DB_EXEC_ERROR);
   _Transaction.executeSql("insert into dataPoints (patient, status, timeIn, timeFor, timeOut, user, device, type, result) values (3, 1, 5, 1, 1, 1, \"device1\", \"History (Active)\",      \"HTN\nHCL\nCVA\")", [], null, _DB_EXEC_ERROR);
   _Transaction.executeSql("insert into dataPoints (patient, status, timeIn, timeFor, timeOut, user, device, type, result) values (3, 1, 5, 1, 1, 1, \"device1\", \"History (Inactive)\",    \"THR\nD&C\nPTx\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (1, \"Lastname\", \"Lastname\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (2, \"Firstname\", \"Firstname\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (3, \"Date of Birth\", \"DOB\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (4, \"Address\", \"Address\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (5, \"Height\", \"Height\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (6, \"Weight\", \"Weight\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (7, \"History (Active)\", \"B/G\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (8, \"History (Inactive)\", \"B/G/\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (9, \"Medications\", \"Meds\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (10, \"Allergies / Reactions\", \"Allergies\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (11, \"Alerts\", \"Alerts\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (12, \"Immunisations\", \"Imm\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (13, \"Heart Rate (/min)\", \"HR\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (14, \"Blood Pressure (mmHg)\", \"BP\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (15, \"Respiratory Rate (/min)\", \"RR\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (16, \"Oxygen Saturation (%)\", \"SO2\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (17, \"Temperature (degC)\", \"T\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (18, \"Blood Glucose Level (mmol/L)\", \"BGL\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (19, \"Coma Scale\", \"CS\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (20, \"White Cell Count (*1e6/L)\", \"WCC\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (21, \"Haemoglobin (g/L)\", \"Hb\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (22, \"Platelets (*1e6/L)\", \"Plt\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (23, \"Sodium (mmol/H)\", \"Na\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (24, \"Potassium (mmol/H)\", \"K\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (25, \"Chloride (mmol/H)\", \"Cl\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (26, \"Bicarbonate (mmol/H)\", \"HCO3\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (27, \"Urea (mmol/H)\", \"Ur\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (28, \"Creatinine (mmol/H)\", \"Cr\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (29, \"Bilirubin (mmol/H)\", \"Bili\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (30, \"X-Ray Chest\", \"CXR\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (31, \"X-Ray Abdomen\", \"AXR\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into fields (sortOrder, name, key) values (32, \"General Clinical Note\", \"Note\")", [], null, _DB_EXEC_ERROR);
  };
-
  _DB.transaction(_make, _DB_TRANS_ERROR, null);
 })();
 
