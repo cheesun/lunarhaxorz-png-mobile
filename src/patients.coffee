@@ -11,7 +11,7 @@
   )
 
   $('#erase-database').click((event) ->
-    $$.Database.erase($$.Models)
+    $$.Database.empty($$.Models)
     buildTable()
   )
 
