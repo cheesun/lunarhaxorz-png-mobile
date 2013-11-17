@@ -77,8 +77,9 @@ class Model
 
 Patient = new Model(Schemas.patients)
 Summary = new Model(Schemas.summaries)
+Datapoint = new Model(Schemas.datapoints)
 
-for model in [Patient, Summary]
+for model in [Patient, Summary, Datapoint]
   model.buildTable(true)
   model.buildFixtures()
 
@@ -87,3 +88,4 @@ window.$$ = window.$$ || {}
 window.$$.Database = Database
 window.$$.Patient = Patient
 window.$$.Summary = Summary
+window.$$.Datapoint = Datapoint
