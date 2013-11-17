@@ -19,26 +19,75 @@ Database = {
 }
 
 Schemas = {
-  datapoints: {
-    name: 'datapoints'
-    columns: ['name', 'value', 'date']
+  patients: {
+    name: 'patients'
+    columns: ['id']
+  }
+
+  staff: {
+    name: 'staff'
+    columns: ['id', 'name']
+    fixtures: [
+      { name: 'zhao'  }
+      { name: 'david' }
+      { name: 'ping'  }
+      { name: 'chees' }
+      { name: 'al'    }
+      { name: 'cyb '  }
+    ]
   }
 
   summaries: {
     name: 'summaries'
-    columns: ['patient_id', 'date']
+    columns: ['id', 'patient_id', 'date']
   }
 
-  patients: {
-    name: 'patients'
-    columns: ['name']
+  summaryValues: {
+    name: 'summaryValues'
+    columns: ['id', summary_id, field_id, dataPoint]
+  }
+
+  datapoints: {
+    name: 'datapoints'
+    columns: ['id', 'patient_id', 'status', 'timeIn', 'timeFor', 'timeOut', 'user', 'device', 'field_id', 'value']
+  }
+
+  fields: {
+    name: 'fields'
+    columns: ['id', sortOrder, label, key]
     fixtures: [
-      { name: 'zhao' },
-      { name: 'david' },
-      { name: 'ping' },
-      { name: 'chees' },
-      { name: 'al' },
-      { name: 'cyb' },
+        { sortOrder:  1, label: Lastname,                     key: Lastname  }
+        { sortOrder:  2, label: Firstname,                    key: Firstname }
+        { sortOrder:  3, label: Date of Birth,                key: DOB       }
+        { sortOrder:  4, label: Address,                      key: Address   }
+        { sortOrder:  5, label: Height,                       key: Height    }
+        { sortOrder:  6, label: Weight,                       key: Weight    }
+        { sortOrder:  7, label: History (Active),             key: B/G       }
+        { sortOrder:  8, label: History (Inactive),           key: B/G/      }
+        { sortOrder:  9, label: Medications,                  key: Meds      }
+        { sortOrder: 10, label: Allergies / Reactions,        key: Allergies }
+        { sortOrder: 11, label: Alerts,                       key: Alerts    }
+        { sortOrder: 12, label: Immunisations,                key: Imm       }
+        { sortOrder: 13, label: Heart Rate (/min),            key: HR        }
+        { sortOrder: 14, label: Blood Pressure (mmHg),        key: BP        }
+        { sortOrder: 15, label: Respiratory Rate (/min),      key: RR        }
+        { sortOrder: 16, label: Oxygen Saturation (%),        key: SO2       }
+        { sortOrder: 17, label: Temperature (degC),           key: T         }
+        { sortOrder: 18, label: Blood Glucose Level (mmol/L), key: BGL       }
+        { sortOrder: 19, label: Coma Scale,                   key: CS        }
+        { sortOrder: 20, label: White Cell Count (*1e6/L),    key: WCC       }
+        { sortOrder: 21, label: Haemoglobin (g/L),            key: Hb        }
+        { sortOrder: 22, label: Platelets (*1e6/L),           key: Plt       }
+        { sortOrder: 23, label: Sodium (mmol/H),              key: Na        }
+        { sortOrder: 24, label: Potassium (mmol/H),           key: K         }
+        { sortOrder: 25, label: Chloride (mmol/H),            key: Cl        }
+        { sortOrder: 26, label: Bicarbonate (mmol/H),         key: HCO3      }
+        { sortOrder: 27, label: Urea (mmol/H),                key: Ur        }
+        { sortOrder: 28, label: Creatinine (mmol/H),          key: Cr        }
+        { sortOrder: 29, label: Bilirubin (mmol/H),           key: Bili      }
+        { sortOrder: 30, label: X-Ray Chest,                  key: CXR       }
+        { sortOrder: 31, label: X-Ray Abdomen,                key: AXR       }
+        { sortOrder: 32, label: General Clinical Note,        key: Note      }
     ]
 
   }

@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+
+</title>
+<style type="text/css">
+</style>
+</head>
+<body>
+<script type="text/javascript"><!--
+
+
+(function () {
+ var _DB_ERROR;
+ var _DB;
+ var _test, _read, _show;
+ var _mrn;
+ var _el, _e3, _man, _mrni, _loadb;
+ var _forceLoad;
+
+ _DB_TRANS_ERROR = function (_Error) {
+  console.log("SQL Transaction error (" + _Error.code  + ")");
+ };
+ _DB_EXEC_ERROR = function (_Transaction, _Error) {
+  console.log("SQL Execution error (" + _Error.code  + ")");
+ };
+
+ _el = document.createElement("div");
+ document.body.appendChild(_el);
+ _e2 = document.createElement("h1");
+ _el.appendChild(_e2);
+ _e2.appendChild(document.createTextNode("Patient Summary"));
+
+ _DB = window.openDatabase("TestDataBase", "1.0", "TEST", 1048576);
+
+ _read = function () {
+  _DB.transaction (function (_Transaction) {
+   _Transaction.executeSql("select * from summaries where patient_id = " + _mrn, [], function (__Transaction, __Result) {
+    if (__Result.rows.length > 0) {
+     _DB.transaction (function (___Transaction) {
+      ___Transaction.executeSql("select * from summaries where patient_id = " + _mrn + " order by date desc limit 1", [], function (____Transaction, __Result) {
+       _DB.transaction (function (_____Transaction) {
+        _____Transaction.executeSql("select * from summaries inner join summaryValues on summaries.rowid = summaryValues.summary_id inner join dataPoints on summaryValues.dataPoint = dataPoints.rowid inner join fields on dataPoints.field_id = fields.label where summaries.rowid = " + __Result.rows.item(0).id + " order by fields.sortOrder", [], _show, _DB_EXEC_ERROR);
+       }, _DB_TRANS_ERROR, null);
+      }, _DB_EXEC_ERROR);
+     }, _DB_TRANS_ERROR, null);
+    } else {
+     _e2 = document.createElement("div");
+     _el.appendChild(_e2);
+     _e2.appendChild(document.createTextNode("Patient not found."));
+    }
+   }, _DB_EXEC_ERROR);
+  }, _DB_TRANS_ERROR, null);
+ };
+
+ _show = function (_Transaction, _Result) {
+  var __l;
+  var __n;
+  var __text;
+  for (__n = 0, __l = _Result.rows.length; __n < __l; __n++) {
+   console.log("Row / ID = " + __n + " Field = " + _Result.rows.item(__n).field_id + " Value = " + _Result.rows.item(__n).value);
+   _e2 = document.createElement("div");
+   if (_Result.rows.item(__n).value.indexOf('\n') == -1) {
+    _el.appendChild(_e2);
+    _e3 = document.createElement("span");
+    _e3.appendChild(document.createTextNode(_Result.rows.item(__n).field_id + ": "));
+    _e3.style.fontWeight = "bold";
+    _e2.appendChild(_e3);
+    _e3 = document.createElement("span");
+    _e3.appendChild(document.createTextNode(_Result.rows.item(__n).value));
+    _e2.appendChild(_e3);
+   } else {
+    _el.appendChild(_e2);
+    _e3 = document.createElement("div");
+    _e3.appendChild(document.createTextNode(_Result.rows.item(__n).field_id + ":"));
+    _e3.style.fontWeight = "bold";
+    _e2.appendChild(_e3);
+    _e3 = document.createElement("div");
+    _e3.innerHTML = _Result.rows.item(__n).value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>\n");
+    _e3.style.padding = "1ex";
+    _e2.appendChild(_e3);
+   }
+  }
+  _loadb.removeEventListener("click", _forceLoad, false);
+  _el.removeChild(_man);
+ };
+
+ _forceLoad = function () {_mrn = _mrni.value; _read();};
+
+ if (typeof localStorage.mrn === "undefined") {
+  _man = document.createElement("div");
+  _el.appendChild(_man);
+  _man.appendChild(document.createTextNode("MRN: "));
+  _mrni = document.createElement("input");
+  _mrni.type = "text";
+  _man.appendChild(_mrni);
+  _mrni.value = "1";
+  _mrni.style.textAlign = "right";
+  _mrni.style.border = "1px solid #c0c0c0";
+  _loadb = document.createElement("button");
+  _loadb.appendChild(document.createTextNode("load"));
+  _man.appendChild(_loadb);
+  _loadb.addEventListener("click", _forceLoad, false);
+ } else {
+  _mrn = localStorage.mrn;
+  _read();
+ }
+
+})();
+
+
+
+
+
+//--></script>
+</body>
+</html>
