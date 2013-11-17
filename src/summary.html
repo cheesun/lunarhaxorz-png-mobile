@@ -88,7 +88,11 @@ console.log("select * from summaries inner join summaryValues on summaries.id = 
  _show = function (_Transaction, _Result) {
   var __l;
   var __n;
-  _summary = _Result.rows;
+  if (_Result.rows) {
+   _summary = _Result.rows;
+  } else {
+   _summary = [];
+  }
 console.log(_summary.length);
   for (__n = 0, __l = _Result.rows.length; __n < __l; __n++) {
    console.log("Row / ID = " + __n + " Field = " + _Result.rows.item(__n).label + " Value = " + _Result.rows.item(__n).value);
@@ -182,7 +186,7 @@ console.log(___Result.rows.length);
      var ____n, ____nn;
      var ____s = [];
      var ____u;
-console.log(_summary);
+console.log("SUMMARY: " + _summary);
      for (____nn = 0; ____nn < _summary.length; ____nn++) {
       ____s[____nn] = {
        fid: _summary.item(____nn).field_id,
