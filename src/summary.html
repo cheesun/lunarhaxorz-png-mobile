@@ -70,6 +70,7 @@ console.log("select * from summaries inner join summaryValues on summaries.id = 
       }, _DB_EXEC_ERROR);
      }, _DB_TRANS_ERROR, null);
     } else {
+	 _summary = [];
      _e2 = document.createElement("div");
      _el.appendChild(_e2);
      _e2.appendChild(document.createTextNode("No summary for this patient ID."));
@@ -88,10 +89,10 @@ console.log("select * from summaries inner join summaryValues on summaries.id = 
  _show = function (_Transaction, _Result) {
   var __l;
   var __n;
-  if (_Result.rows) {
-   _summary = _Result.rows;
-  } else {
+  if (typeof _Result.rows === "undefined") {
    _summary = [];
+  } else {
+   _summary = _Result.rows;
   }
 console.log(_summary.length);
   for (__n = 0, __l = _Result.rows.length; __n < __l; __n++) {
