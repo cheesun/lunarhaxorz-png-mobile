@@ -24,7 +24,7 @@
   console.log("SQL Execution error (" + _Error.code  + ")");
  };
 
- _DB = window.openDatabase("TestDataBase", "1.0", "TEST", 1048576);
+ _DB = window.openDatabase("test", "1.0", "test", 1048576);
 
  _make = function (_Transaction) {
   _Transaction.executeSql("drop table if exists patients", [], null, _DB_EXEC_ERROR);
@@ -67,23 +67,23 @@
   _Transaction.executeSql("insert into summaryValues (summary_id, field_id, dataPoint) values (4, \"History (Active)\",   16)", [], null, _DB_EXEC_ERROR);
   _Transaction.executeSql("insert into summaryValues (summary_id, field_id, dataPoint) values (4, \"History (Inactive)\", 17)", [], null, _DB_EXEC_ERROR);
 
-  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (1, 1, 1, 1, 1, 1, \"device1\", \"History (Active)\",      \"HTN\nHCL\nOSA\")", [], null, _DB_EXEC_ERROR);
-  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (1, 1, 1, 1, 1, 1, \"device1\", \"History (Inactive)\",    \"TKR\nT&A\nPTx\")", [], null, _DB_EXEC_ERROR);
-  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (1, 1, 1, 1, 1, 1, \"device1\", \"Medications\",           \"midazolam\")", [], null, _DB_EXEC_ERROR);
-  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (1, 1, 1, 1, 1, 1, \"device1\", \"Allergies / Reactions\", \"nkda\")", [], null, _DB_EXEC_ERROR);
-  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (1, 1, 1, 1, 1, 1, \"device1\", \"Alerts\",                \"missing\")", [], null, _DB_EXEC_ERROR);
-  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (2, 1, 1, 1, 1, 1, \"device1\", \"Ca++ (mmol/L)\",         \"2.20\")", [], null, _DB_EXEC_ERROR);
-  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (2, 1, 2, 1, 1, 1, \"device1\", \"Mg++ (mmol/L)\",         \"0.95\")", [], null, _DB_EXEC_ERROR);
-  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (2, 1, 3, 1, 1, 1, \"device1\", \"PO4--- (mmol/L)\",       \"1.33\")", [], null, _DB_EXEC_ERROR);
-  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (2, 1, 4, 1, 1, 1, \"device1\", \"HR (/min)\",             \"75\")", [], null, _DB_EXEC_ERROR);
-  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (2, 1, 5, 1, 1, 1, \"device1\", \"BP (mmHg)\",             \"120/80\")", [], null, _DB_EXEC_ERROR);
-  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (2, 1, 6, 1, 1, 1, \"device1\", \"RR (/min)\",             \"15\")", [], null, _DB_EXEC_ERROR);
-  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (2, 1, 7, 1, 1, 1, \"device1\", \"SO2 (%)\",               \"99\")", [], null, _DB_EXEC_ERROR);
-  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (2, 1, 1, 1, 1, 1, \"device1\", \"T (°C)\",                \"36.6\")", [], null, _DB_EXEC_ERROR);
-  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (3, 1, 1, 1, 1, 1, \"device1\", \"History (Inactive)\",    \"TKR\nT&A\nPTx\")", [], null, _DB_EXEC_ERROR);
-  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (3, 1, 3, 1, 1, 1, \"device1\", \"History (Inactive)\",    \"THR\nT&A\nPTx\")", [], null, _DB_EXEC_ERROR);
-  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (3, 1, 5, 1, 1, 1, \"device1\", \"History (Active)\",      \"HTN\nHCL\nCVA\")", [], null, _DB_EXEC_ERROR);
-  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (3, 1, 5, 1, 1, 1, \"device1\", \"History (Inactive)\",    \"THR\nD&C\nPTx\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (1, \"valid\", 1, 1, 1, 1, \"device1\", \"History (Active)\",      \"HTN\nHCL\nOSA\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (1, \"valid\", 1, 1, 1, 1, \"device1\", \"History (Inactive)\",    \"TKR\nT&A\nPTx\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (1, \"valid\", 1, 1, 1, 1, \"device1\", \"Medications\",           \"midazolam\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (1, \"valid\", 1, 1, 1, 1, \"device1\", \"Allergies / Reactions\", \"nkda\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (1, \"valid\", 1, 1, 1, 1, \"device1\", \"Alerts\",                \"missing\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (2, \"valid\", 1, 1, 1, 1, \"device1\", \"Ca++ (mmol/L)\",         \"2.20\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (2, \"valid\", 2, 1, 1, 1, \"device1\", \"Mg++ (mmol/L)\",         \"0.95\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (2, \"valid\", 3, 1, 1, 1, \"device1\", \"PO4--- (mmol/L)\",       \"1.33\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (2, \"valid\", 4, 1, 1, 1, \"device1\", \"HR (/min)\",             \"75\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (2, \"valid\", 5, 1, 1, 1, \"device1\", \"BP (mmHg)\",             \"120/80\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (2, \"valid\", 6, 1, 1, 1, \"device1\", \"RR (/min)\",             \"15\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (2, \"valid\", 7, 1, 1, 1, \"device1\", \"SO2 (%)\",               \"99\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (2, \"valid\", 1, 1, 1, 1, \"device1\", \"T (°C)\",                \"36.6\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (3, \"valid\", 1, 1, 1, 1, \"device1\", \"History (Inactive)\",    \"TKR\nT&A\nPTx\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (3, \"valid\", 3, 1, 1, 1, \"device1\", \"History (Inactive)\",    \"THR\nT&A\nPTx\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (3, \"valid\", 5, 1, 1, 1, \"device1\", \"History (Active)\",      \"HTN\nHCL\nCVA\")", [], null, _DB_EXEC_ERROR);
+  _Transaction.executeSql("insert into dataPoints (patient_id, status, timeIn, timeFor, timeOut, user, device, field_id, value) values (3, \"valid\", 5, 1, 1, 1, \"device1\", \"History (Inactive)\",    \"THR\nD&C\nPTx\")", [], null, _DB_EXEC_ERROR);
 
   _Transaction.executeSql("insert into fields (sortOrder, label, key) values ( 1, \"Lastname\",                       \"Lastname\"  )", [], null, _DB_EXEC_ERROR);
   _Transaction.executeSql("insert into fields (sortOrder, label, key) values ( 2, \"Firstname\",                      \"Firstname\" )", [], null, _DB_EXEC_ERROR);
