@@ -64,8 +64,8 @@ console.log("select * from summaries where patient_id = " + _mrn + " order by da
 console.log(__Result.rows.length);
        _DB.transaction (function (_____Transaction) {
         _sid = __Result.rows.item(0).id;
-console.log("select * from summaries inner join summaryValues on summaries.rowid = summaryValues.summary_id inner join dataPoints on summaryValues.dataPoint = dataPoints.rowid inner join fields on dataPoints.field_id = fields.id where summaries.rowid = " + __Result.rows.item(0).id + " order by fields.sortOrder");
-        _____Transaction.executeSql("select * from summaries inner join summaryValues on summaries.rowid = summaryValues.summary_id inner join dataPoints on summaryValues.dataPoint = dataPoints.rowid inner join fields on dataPoints.field_id = fields.id where summaries.rowid = " + __Result.rows.item(0).id + " order by fields.sortOrder", [], _show, _DB_EXEC_ERROR);
+console.log("select * from summaries inner join summaryValues on summaries.id = summaryValues.summary_id inner join dataPoints on summaryValues.dataPoint = dataPoints.id inner join fields on dataPoints.field_id = fields.id where summaries.id = " + __Result.rows.item(0).id + " order by fields.sortOrder");
+        _____Transaction.executeSql("select * from summaries inner join summaryValues on summaries.id = summaryValues.summary_id inner join dataPoints on summaryValues.dataPoint = dataPoints.id inner join fields on dataPoints.field_id = fields.id where summaries.id = " + __Result.rows.item(0).id + " order by fields.sortOrder", [], _show, _DB_EXEC_ERROR);
        }, _DB_TRANS_ERROR, null);
       }, _DB_EXEC_ERROR);
      }, _DB_TRANS_ERROR, null);
@@ -132,8 +132,8 @@ console.log(_summary.length);
   _el.appendChild(_e2);
   _e2.appendChild(document.createTextNode("Full Record"));
   _DB.transaction (function (__Transaction) {
-console.log("select * from dataPoints where patient_id = " + _mrn.toString(10) + " and status = \"valid\" order by timeFor");
-   __Transaction.executeSql("select * from dataPoints where patient_id = " + _mrn.toString(10) + " and status = \"valid\" order by timeFor", [], function (___Transaction, ___Result) {
+console.log("select * from dataPoints join fields on dataPoints.field_id = fields.id where patient_id = " + _mrn.toString(10) + " and status = \"valid\" order by timeFor");
+   __Transaction.executeSql("select * from dataPoints join fields on dataPoints.field_id = fields.id where patient_id = " + _mrn.toString(10) + " and status = \"valid\" order by timeFor", [], function (___Transaction, ___Result) {
     var ___l;
     var ___n;
 console.log(___Result.rows.length);
@@ -144,7 +144,7 @@ console.log(___Result.rows.length);
      _el.appendChild(_e2);
      if (___Result.rows.item(___n).value.indexOf('\n') == -1) {
       _e3 = document.createElement("span");
-      _e3.appendChild(document.createTextNode("[" + _YYYYMMDD(new Date(___Result.rows.item(___n).timeFor * 1000)) + "] " + ___Result.rows.item(___n).field_id.toString(10) + ": "));
+      _e3.appendChild(document.createTextNode("[" + _YYYYMMDD(new Date(___Result.rows.item(___n).timeFor * 1000)) + "] " + ___Result.rows.item(___n).label + ": "));
       _e3.style.fontWeight = "bold";
       _e2.appendChild(_e3);
       _e3 = document.createElement("span");
@@ -152,7 +152,7 @@ console.log(___Result.rows.length);
       _e2.appendChild(_e3);
      } else {
       _e3 = document.createElement("div");
-      _e3.appendChild(document.createTextNode("[" + _YYYYMMDD(new Date(___Result.rows.item(___n).timeFor * 1000)) + "] " + ___Result.rows.item(___n).field_id.toString(10) + ":"));
+      _e3.appendChild(document.createTextNode("[" + _YYYYMMDD(new Date(___Result.rows.item(___n).timeFor * 1000)) + "] " + ___Result.rows.item(___n).label + ":"));
       _e3.style.fontWeight = "bold";
       _e2.appendChild(_e3);
       _e3 = document.createElement("div");
@@ -225,7 +225,8 @@ console.log("select * from summaries where patient_id = " + _mrn.toString(10) + 
    __Transaction.executeSql("select * from summaries where patient_id = " + _mrn.toString(10) + " and date = " + d, [], function (___Transaction, ___Result) {
 
     for (__n = 0, __l = _S.length; __n < __l; __n++) {
-     __Transaction.executeSql("insert into summaryValues (summary_id, field_id, dataPoint) values (" + ___Result.rows.item(0).id + ", \"" + _S[__n].fid + "\", " + _S[__n].dp + ")", [], null, _DB_EXEC_ERROR);
+console.log("insert into summaryValues (summary_id, field_id, dataPoint) values (" + ___Result.rows.item(0).id + ", " + _S[__n].fid + ", " + _S[__n].dp + ")");
+     __Transaction.executeSql("insert into summaryValues (summary_id, field_id, dataPoint) values (" + ___Result.rows.item(0).id + ", " + _S[__n].fid + ", " + _S[__n].dp + ")", [], null, _DB_EXEC_ERROR);
     }
 
    }, _DB_EXEC_ERROR);
@@ -234,8 +235,8 @@ console.log("select * from summaries where patient_id = " + _mrn.toString(10) + 
 
  _forceLoad = function () {_mrn = _mrni.value; _read();};
 
-// _mrn = $$.Utils.queryParam('id');
-_mrn = 3;
+ _mrn = $$.Utils.queryParam('id');
+//_mrn = 2;
 
  if (isNaN(parseInt(_mrn, 10))) {
   _man = document.createElement("div");
