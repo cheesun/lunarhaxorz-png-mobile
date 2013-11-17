@@ -1,0 +1,57 @@
+<html>
+	<head>
+		<title>Patient Data</title>
+		<script type='text/javascript' src='jquery-1.9.1.min.js'></script>
+		<script type='text/javascript' src='models.js'></script>
+		<script>
+			var keys = ['bp', 'hr']
+			function processLine(linename) {
+				//Analyse the content of the line here
+				var lineval = $(linename).val();
+				
+				for (k in keys) {
+					var re = new RegExp('\\b(' + keys[k] + ')(?: +|:)(\\d+)\\b', 'ig');
+					var upto = 0;
+					var line_processed = "";
+					var reresult;
+					while (reresult = re.exec(lineval)) {
+						var key = reresult[1];
+						var val = reresult[2];
+						//console.log (key + ' ' + val);
+						var i = reresult.index;
+						var n = reresult[0].length;
+						
+						//Values are separated here - store and embed them into the line
+						line_processed += lineval.substr(upto, i - upto) + '<b>' + key + ':' + val + '</b>';;
+						
+						upto = i + n;
+					}
+					line_processed += lineval.substr(upto);
+					lineval = line_processed;
+				}
+				
+				//$$.Datapoint.create ({name: 'dave', value:, date:'now'});
+				
+			    var cb = $('#cursorbox')
+				var dataline = $('<div>' + lineval + '</div>');
+				cb.before(dataline);
+				dataline.on('click', function() {
+					processLine('#cursorbox');
+			    	var cb = $('#cursorbox')
+			        dataline.after(cb)
+			        cb.val(dataline.text());
+					dataline.remove();
+					cb.focus();
+				});
+				$(linename).val("");
+				return false;
+			}
+		</script>
+	</head>
+	<body>
+		<h3>Current Patient ID: ~</h3>
+			<div id="Data">
+				<input onchange="return processLine('#cursorbox');" type="text" id="cursorbox" size="150">
+			</div>
+	</body>
+</html>
