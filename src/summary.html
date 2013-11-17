@@ -7,6 +7,8 @@
 </title>
 <style type="text/css">
 </style>
+<script type='text/javascript' src='jquery-1.9.1.min.js'></script>
+<script type='text/javascript' src='models.js'></script>
 </head>
 <body>
 <script type="text/javascript"><!--
@@ -19,6 +21,18 @@
  var _mrn;
  var _el, _e3, _man, _mrni, _loadb;
  var _forceLoad;
+ var _YYYYMMDD;
+
+ _YYYYMMDD = function (_D) {
+  var __s;
+  var __y;
+  __s = function (_n) {
+   return (0 <= _n && _n < 10? "0" + _n.toString(10): _n.toString(10));
+  };
+  (!_D) && (_D = new Date());
+  __y = _D.getFullYear();
+  return __s((__y - __y % 100) / 100) + __s(__y % 100) + __s(_D.getMonth() + 1) + __s(_D.getDate()) + " " + __s(_D.getHours()) + __s(_D.getMinutes()) + ":" + __s(_D.getSeconds());
+ };
 
  _DB_TRANS_ERROR = function (_Error) {
   console.log("SQL Transaction error (" + _Error.code  + ")");
@@ -27,6 +41,7 @@
   console.log("SQL Execution error (" + _Error.code  + ")");
  };
 
+ _man = _mrni = _loadb = null;
  _el = document.createElement("div");
  document.body.appendChild(_el);
  _e2 = document.createElement("h1");
@@ -50,6 +65,12 @@
      _e2 = document.createElement("div");
      _el.appendChild(_e2);
      _e2.appendChild(document.createTextNode("Patient not found."));
+     _e2 = document.createElement("div");
+     _el.appendChild(_e2);
+     _e3 = document.createElement("a");
+     _e3.appendChild(document.createTextNode("[create new record]"));
+     _e3.href = "dataentry.html?" + _mrn.toString(10);
+     _e2.appendChild(_e3);
     }
    }, _DB_EXEC_ERROR);
   }, _DB_TRANS_ERROR, null);
@@ -58,11 +79,11 @@
  _show = function (_Transaction, _Result) {
   var __l;
   var __n;
-  var __text;
   for (__n = 0, __l = _Result.rows.length; __n < __l; __n++) {
    console.log("Row / ID = " + __n + " Field = " + _Result.rows.item(__n).field_id + " Value = " + _Result.rows.item(__n).value);
    _e2 = document.createElement("div");
-   if (_Result.rows.item(__n).value.indexOf('\n') == -1) {
+   if (_Result.rows.item(__n).
+value.indexOf('\n') == -1) {
     _el.appendChild(_e2);
     _e3 = document.createElement("span");
     _e3.appendChild(document.createTextNode(_Result.rows.item(__n).field_id + ": "));
@@ -83,13 +104,56 @@
     _e2.appendChild(_e3);
    }
   }
-  _loadb.removeEventListener("click", _forceLoad, false);
-  _el.removeChild(_man);
+  _e2 = document.createElement("div");
+  _el.appendChild(_e2);
+  _e3 = document.createElement("a");
+  _e3.appendChild(document.createTextNode("[update this record]"));
+  _e3.href = "dataentry.html?" + _mrn.toString(10);
+  _e2.appendChild(_e3);
+  if (_man && _loadb) {
+   _loadb.removeEventListener("click", _forceLoad, false);
+   _el.removeChild(_man);
+  }
+  _e2 = document.createElement("h1");
+  _el.appendChild(_e2);
+  _e2.appendChild(document.createTextNode("Full Record"));
+  _DB.transaction (function (__Transaction) {
+   __Transaction.executeSql("select * from dataPoints where patient_id = " + _mrn.toString(10) + " and status = 1 order by timeFor", [], function (___Transaction, ___Result) {
+    var ___l;
+    var ___n;
+    for (___n = 0, ___l = ___Result.rows.length; ___n < ___l; ___n++) {
+     _e2 = document.createElement("div");
+     if (___Result.rows.item(___n).value.indexOf('\n') == -1) {
+      _el.appendChild(_e2);
+      _e3 = document.createElement("span");
+      _e3.appendChild(document.createTextNode("[" + _YYYYMMDD(new Date(___Result.rows.item(___n).timeFor * 1000)) + "] " + ___Result.rows.item(___n).field_id + ": "));
+      _e3.style.fontWeight = "bold";
+      _e2.appendChild(_e3);
+      _e3 = document.createElement("span");
+      _e3.appendChild(document.createTextNode(___Result.rows.item(___n).value));
+      _e2.appendChild(_e3);
+     } else {
+      _el.appendChild(_e2);
+      _e3 = document.createElement("div");
+      _e3.appendChild(document.createTextNode("[" + _YYYYMMDD(new Date(___Result.rows.item(___n).timeFor * 1000)) + "] " + ___Result.rows.item(___n).field_id + ":"));
+      _e3.style.fontWeight = "bold";
+      _e2.appendChild(_e3);
+      _e3 = document.createElement("div");
+      _e3.innerHTML = ___Result.rows.item(___n).value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>\n");
+      _e3.style.padding = "1ex";
+      _e2.appendChild(_e3);
+     }
+    }
+   }, _DB_EXEC_ERROR);
+  }, _DB_TRANS_ERROR, null);
  };
 
  _forceLoad = function () {_mrn = _mrni.value; _read();};
 
- if (typeof localStorage.mrn === "undefined") {
+ _mrn = $$.Utils.queryParam('id');
+//_mrn = 3;
+
+ if (isNaN(parseInt(_mrn, 10))) {
   _man = document.createElement("div");
   _el.appendChild(_man);
   _man.appendChild(document.createTextNode("MRN: "));
@@ -104,7 +168,7 @@
   _man.appendChild(_loadb);
   _loadb.addEventListener("click", _forceLoad, false);
  } else {
-  _mrn = localStorage.mrn;
+  _mrn = parseInt(_mrn, 10);
   _read();
  }
 
