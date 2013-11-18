@@ -1,0 +1,267 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+
+</title>
+<style type="text/css">
+</style>
+<script type='text/javascript' src='jquery-1.9.1.min.js'></script>
+<script type='text/javascript' src='models.js'></script>
+</head>
+<body>
+<script type="text/javascript"><!--
+
+
+(function () {
+ var _DB_ERROR;
+ var _DB;
+ var _test, _read, _show, _full;
+ var _updateSummary;
+ var _summary, _sid;
+ var _mrn;
+ var _el, _e2, _e3, _e4, _man, _mrni, _loadb, _updates = [];
+ var _forceLoad;
+ var _YYYYMMDD;
+
+ _YYYYMMDD = function (_D) {
+  var __s;
+  var __y;
+  __s = function (_n) {
+   return (0 <= _n && _n < 10? "0" + _n.toString(10): _n.toString(10));
+  };
+  (!_D) && (_D = new Date());
+  __y = _D.getFullYear();
+  return __s((__y - __y % 100) / 100) + __s(__y % 100) + __s(_D.getMonth() + 1) + __s(_D.getDate()) + " " + __s(_D.getHours()) + __s(_D.getMinutes()) + ":" + __s(_D.getSeconds());
+ };
+
+ _DB_TRANS_ERROR = function (_Error) {
+  console.log("SQL Transaction error (" + _Error.code  + ")");
+ };
+ _DB_EXEC_ERROR = function (_Transaction, _Error) {
+  console.log("SQL Execution error (" + _Error.code  + ")");
+ };
+
+ _man = _mrni = _loadb = null;
+ _el = document.createElement("div");
+ document.body.appendChild(_el);
+ _e2 = document.createElement("h1");
+ _el.appendChild(_e2);
+ _e2.appendChild(document.createTextNode("Patient Summary"));
+
+ _DB = window.openDatabase("test", "1.0", "test", 200000);
+
+ _read = function () {
+  _DB.transaction (function (_Transaction) {
+console.log("select * from summaries where patient_id = " + _mrn);
+   _Transaction.executeSql("select * from summaries where patient_id = " + _mrn, [], function (__Transaction, __Result) {
+console.log(__Result.rows.length);
+    if (__Result.rows.length > 0) {
+     _DB.transaction (function (___Transaction) {
+console.log("select * from summaries where patient_id = " + _mrn + " order by date desc limit 1");
+      ___Transaction.executeSql("select * from summaries where patient_id = " + _mrn + " order by date desc limit 1", [], function (____Transaction, __Result) {
+console.log(__Result.rows.length);
+       _DB.transaction (function (_____Transaction) {
+        _sid = __Result.rows.item(0).id;
+console.log("select * from summaries inner join summaryValues on summaries.rowid = summaryValues.summary_id inner join dataPoints on summaryValues.dataPoint = dataPoints.rowid inner join fields on dataPoints.field_id = fields.id where summaries.rowid = " + __Result.rows.item(0).id + " order by fields.sortOrder");
+        _____Transaction.executeSql("select * from summaries inner join summaryValues on summaries.rowid = summaryValues.summary_id inner join dataPoints on summaryValues.dataPoint = dataPoints.rowid inner join fields on dataPoints.field_id = fields.id where summaries.rowid = " + __Result.rows.item(0).id + " order by fields.sortOrder", [], _show, _DB_EXEC_ERROR);
+       }, _DB_TRANS_ERROR, null);
+      }, _DB_EXEC_ERROR);
+     }, _DB_TRANS_ERROR, null);
+    } else {
+     _e2 = document.createElement("div");
+     _el.appendChild(_e2);
+     _e2.appendChild(document.createTextNode("No summary for this patient ID."));
+     _e2 = document.createElement("div");
+     _el.appendChild(_e2);
+     _e3 = document.createElement("a");
+     _e3.appendChild(document.createTextNode("[update / create new record]"));
+     _e3.href = "dataentry.html?id=" + _mrn.toString(10);
+     _e2.appendChild(_e3);
+     _full();
+    }
+   }, _DB_EXEC_ERROR);
+  }, _DB_TRANS_ERROR, null);
+ };
+
+ _show = function (_Transaction, _Result) {
+  var __l;
+  var __n;
+  _summary = _Result.rows;
+console.log(_summary.length);
+  for (__n = 0, __l = _Result.rows.length; __n < __l; __n++) {
+   console.log("Row / ID = " + __n + " Field = " + _Result.rows.item(__n).label + " Value = " + _Result.rows.item(__n).value);
+   _e2 = document.createElement("div");
+   if (_Result.rows.item(__n).value.indexOf('\n') == -1) {
+    _el.appendChild(_e2);
+    _e3 = document.createElement("span");
+    _e3.appendChild(document.createTextNode(_Result.rows.item(__n).label + ": "));
+    _e3.style.fontWeight = "bold";
+    _e2.appendChild(_e3);
+    _e3 = document.createElement("span");
+    _e3.appendChild(document.createTextNode(_Result.rows.item(__n).value));
+    _e2.appendChild(_e3);
+   } else {
+    _el.appendChild(_e2);
+    _e3 = document.createElement("div");
+    _e3.appendChild(document.createTextNode(_Result.rows.item(__n).label + ":"));
+    _e3.style.fontWeight = "bold";
+    _e2.appendChild(_e3);
+    _e3 = document.createElement("div");
+    _e3.innerHTML = _Result.rows.item(__n).value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>\n");
+    _e3.style.padding = "1ex";
+    _e2.appendChild(_e3);
+   }
+  }
+  _e2 = document.createElement("div");
+  _el.appendChild(_e2);
+  _e3 = document.createElement("a");
+  _e3.appendChild(document.createTextNode("[update this record]"));
+  _e3.href = "dataentry.html?id=" + _mrn.toString(10);
+  _e2.appendChild(_e3);
+  if (_man && _loadb) {
+   _loadb.removeEventListener("click", _forceLoad, false);
+   _el.removeChild(_man);
+  }
+  _full();
+ };
+
+ _full = function () {
+  _e2 = document.createElement("h1");
+  _el.appendChild(_e2);
+  _e2.appendChild(document.createTextNode("Full Record"));
+  _DB.transaction (function (__Transaction) {
+console.log("select * from dataPoints where patient_id = " + _mrn.toString(10) + " and status = \"valid\" order by timeFor");
+   __Transaction.executeSql("select * from dataPoints where patient_id = " + _mrn.toString(10) + " and status = \"valid\" order by timeFor", [], function (___Transaction, ___Result) {
+    var ___l;
+    var ___n;
+console.log(___Result.rows.length);
+    for (___n = 0, ___l = ___Result.rows.length; ___n < ___l; ___n++) {
+     _e2 = document.createElement("div");
+     _e2.style.border = "2px solid #c0c0c0";
+     _e2.style.margin = "2px";
+     _el.appendChild(_e2);
+     if (___Result.rows.item(___n).value.indexOf('\n') == -1) {
+      _e3 = document.createElement("span");
+      _e3.appendChild(document.createTextNode("[" + _YYYYMMDD(new Date(___Result.rows.item(___n).timeFor * 1000)) + "] " + ___Result.rows.item(___n).field_id.toString(10) + ": "));
+      _e3.style.fontWeight = "bold";
+      _e2.appendChild(_e3);
+      _e3 = document.createElement("span");
+      _e3.appendChild(document.createTextNode(___Result.rows.item(___n).value));
+      _e2.appendChild(_e3);
+     } else {
+      _e3 = document.createElement("div");
+      _e3.appendChild(document.createTextNode("[" + _YYYYMMDD(new Date(___Result.rows.item(___n).timeFor * 1000)) + "] " + ___Result.rows.item(___n).field_id.toString(10) + ":"));
+      _e3.style.fontWeight = "bold";
+      _e2.appendChild(_e3);
+      _e3 = document.createElement("div");
+      _e3.innerHTML = ___Result.rows.item(___n).value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>\n");
+      _e3.style.padding = "1ex";
+      _e2.appendChild(_e3);
+     }
+     _e3 = document.createElement("div");
+     _e2.appendChild(_e3);
+     _e4 = document.createElement("input");
+     _e4.type = "checkbox";
+     _updates[___n] = {
+      e: _e4,
+      fid: ___Result.rows.item(___n).field_id,
+      dp: ___Result.rows.item(___n).id
+     };
+     _e3.appendChild(_e4);
+     _e3.appendChild(document.createTextNode("use for new summary"));
+     _e3.style.backgroundColor = "#c0c0c0";
+    }
+    _e2 = document.createElement("div");
+    _el.appendChild(_e2);
+    _e3 = document.createElement("button");
+    _e3.appendChild(document.createTextNode("update summary"));
+    _e2.appendChild(_e3);
+    _e3.addEventListener("click", function () {
+     var ____n, ____nn;
+     var ____s = [];
+     var ____u;
+console.log(_summary);
+     for (____nn = 0; ____nn < _summary.length; ____nn++) {
+      ____s[____nn] = {
+       fid: _summary.item(____nn).field_id,
+       dp: _summary.item(____nn).dataPoint
+      }
+     }
+     for (____n = 0; ____n < _updates.length; ____n++) {
+      if (_updates[____n].e.checked) {
+       ____u = false;
+       for (____nn = 0; ____nn < ____s.length; ____nn++) {
+        if (____s[____nn].fid == _updates[____n].fid) {
+         ____s[____nn].dp = _updates[____n].dp;
+         ____u = true;
+        }
+       }
+       if (!____u) {
+        ____s[____nn] = {
+         fid: _updates[____n].fid,
+         dp: _updates[____n].dp
+        }
+       }
+       console.log(_updates[____n].dp);
+      }
+     }
+console.log(____s[0]);
+console.log(____s[1]);
+     _updateSummary(____s);
+    }, false);
+   }, _DB_EXEC_ERROR);
+  }, _DB_TRANS_ERROR, null);
+ };
+
+ _updateSummary = function (_S) {
+  _DB.transaction(function (__Transaction) {
+   var __d;
+   var __n, __l;
+console.log("insert into summaries (patient_id, date) values (" + _mrn.toString(10) + ", " + (d = new Date().getTime().toString(10)) + ")");
+   __Transaction.executeSql("insert into summaries (patient_id, date) values (" + _mrn.toString(10) + ", " + (d = new Date().getTime().toString(10)) + ")", [], null, _DB_EXEC_ERROR);
+console.log("select * from summaries where patient_id = " + _mrn.toString(10) + " and date = " + d);
+   __Transaction.executeSql("select * from summaries where patient_id = " + _mrn.toString(10) + " and date = " + d, [], function (___Transaction, ___Result) {
+
+    for (__n = 0, __l = _S.length; __n < __l; __n++) {
+     __Transaction.executeSql("insert into summaryValues (summary_id, field_id, dataPoint) values (" + ___Result.rows.item(0).id + ", \"" + _S[__n].fid + "\", " + _S[__n].dp + ")", [], null, _DB_EXEC_ERROR);
+    }
+
+   }, _DB_EXEC_ERROR);
+  }, _DB_TRANS_ERROR, null);
+ };
+
+ _forceLoad = function () {_mrn = _mrni.value; _read();};
+
+// _mrn = $$.Utils.queryParam('id');
+_mrn = 3;
+
+ if (isNaN(parseInt(_mrn, 10))) {
+  _man = document.createElement("div");
+  _el.appendChild(_man);
+  _man.appendChild(document.createTextNode("MRN: "));
+  _mrni = document.createElement("input");
+  _mrni.type = "text";
+  _man.appendChild(_mrni);
+  _mrni.value = "1";
+  _mrni.style.textAlign = "right";
+  _mrni.style.border = "1px solid #c0c0c0";
+  _loadb = document.createElement("button");
+  _loadb.appendChild(document.createTextNode("load"));
+  _man.appendChild(_loadb);
+  _loadb.addEventListener("click", _forceLoad, false);
+ } else {
+  _mrn = parseInt(_mrn, 10);
+  _read();
+ }
+
+})();
+
+
+
+
+
+//--></script>
+</body>
+</html>

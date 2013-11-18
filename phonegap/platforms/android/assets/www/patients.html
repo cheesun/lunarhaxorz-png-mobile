@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <script type='text/javascript' src='handlebars-v1.1.2.js'></script>
+    <script type='text/javascript' src='jquery-1.9.1.min.js'></script>
+    <script type='text/javascript' src='jquery.sieve.min.js'></script>
+    <script id="patient-template" type="text/x-handlebars-template">
+      <tr>
+        <td><a href="summary.html?id={{id}}">{{id}}</a></td>
+        <td><a href="summary.html?id={{id}}">{{name}}</a></td>
+      </tr>
+    </script>
+    <script id="div-template" type="text/x-handlebars-template">
+      <div>{{value}}</div>
+    </script>
+
+  </head>
+  <body>
+    <table id='patients-table'>
+      <thead>
+        <tr>
+          <th>id</th><th>name</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <div id='tools'>
+      <input id='add-patient' type='button' value='add patient'>
+      <input id='reset-database' type='button' value='reset db'>
+      <input id='erase-database' type='button' value='erase db'>
+    </div>
+    <script type='text/javascript' src='models.js'></script>
+    <script type='text/javascript' src='patients.js'></script>
+  </body>
+</html>
+

@@ -1,0 +1,88 @@
+<html>
+	<head>
+		<title>Patient Data</title>
+		<script type='text/javascript' src='jquery-1.9.1.min.js'></script>
+		<script type='text/javascript' src='models.js'></script>
+		<script>
+			var patient_id = $$.Utils.queryParam('id');
+			
+			$$.Summary.getFields(patient_id, 2, function(results) {
+				$('#patientname').html (results.rows.item(0).value);
+			});
+			
+			var keys = [];
+			$$.Field.getAll(function (results) {
+				var rl = results.rows.length;
+      			for (i = 0; i < rl; i ++) {
+        			var v = results.rows.item(i);
+        			//console.log(v.id);
+					keys.push ({key:v.key, id:v.id});
+    			}
+    			//console.log (keys);
+				//console.log (results.rows);
+			});
+			
+			function processLine(linename) {
+				//Analyse the content of the line here
+				var lineval = $(linename).val();
+				
+				for (k in keys) {
+					//console.log (keys[k]);
+					var re = new RegExp('\\b(' + keys[k].key.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1') + ')(?: +|:)(\\d+)\\b', 'ig');
+					var upto = 0;
+					var line_processed = "";
+					var reresult;
+					while (reresult = re.exec(lineval)) {
+						console.log (reresult);
+						var key = reresult[1];
+						var val = reresult[2];
+						var i = reresult.index;
+						var n = reresult[0].length;
+						
+						//Values are separated here - store and embed them into the line
+						line_processed += lineval.substr(upto, i - upto) + '<b>' + key + ':' + val + '</b>';
+						$$.Datapoint.create ({
+							patient_id: parseInt(patient_id, 10),
+							status: 'valid',
+							timeIn: '1',
+							timeFor: '1',
+							timeOut: '1',
+							user: '1',
+							device: '1',
+							field_id: keys[k].id,
+							value: val
+						});
+						patient_id
+						
+						upto = i + n;
+					}
+					line_processed += lineval.substr(upto);
+					lineval = line_processed;
+				}
+				
+				//$$.Datapoint.create ({name: 'dave', value:, date:'now'});
+				
+			    var cb = $('#cursorbox')
+				var dataline = $('<div>' + lineval + '</div>');
+				cb.before(dataline);
+				dataline.on('click', function() {
+					processLine('#cursorbox');
+			    	var cb = $('#cursorbox')
+			        dataline.after(cb)
+			        cb.val(dataline.text());
+					dataline.remove();
+					cb.focus();
+				});
+				$(linename).val("");
+				return false;
+			}
+		</script>
+	</head>
+	<body>
+		<h3>Current Patient: <span id="patientname"></span></h3>
+		<h4><a href='summary.html' id="backbutton">Back</a><h4>
+			<div id="Data">
+				<input onchange="return processLine('#cursorbox');" type="text" id="cursorbox" size="150">
+			</div>
+	</body>
+</html>
